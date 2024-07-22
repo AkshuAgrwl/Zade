@@ -1,0 +1,23 @@
+{
+    "editor.formatOnSave": false,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit",
+    },
+    "[javascript][javascriptreact][typescript][typescriptreact]": {
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    },
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter",
+    },
+    "black-formatter.importStrategy": "fromEnvironment",
+    "black-formatter.path": [
+        "${workspaceFolder}/backend/.venv/Scripts/black"
+    ],
+    "eslint.enable": true,
+    "eslint.workingDirectories": [
+        "./frontend"
+    ],
+    "eslint.format.enable": true,
+    "eslint.lintTask.enable": true,
+    "eslint.lintTask.options": "-c ${workspaceFolder}/frontend/.eslintrc.json --ignore-path ${workspaceFolder}/frontend/.eslintignore",
+}
