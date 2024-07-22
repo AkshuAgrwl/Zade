@@ -1,3 +1,129 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": "next/core-web-vitals",
+  "plugins": [
+    "@stylistic"
+  ],
+  "rules": {
+    "@stylistic/array-bracket-newline": [
+      "error",
+      "consistent"
+    ],
+    "@stylistic/array-bracket-spacing": [
+      "error",
+      "always",
+      {
+        "objectsInArrays": false,
+        "arraysInArrays": false
+      }
+    ],
+    "@stylistic/arrow-parens": [
+      "error",
+      "as-needed",
+      {
+        "requireForBlockBody": false
+      }
+    ],
+    "@stylistic/arrow-spacing": [
+      "error",
+      {
+        "before": true,
+        "after": true
+      }
+    ],
+    "@stylistic/block-spacing": [
+      "error",
+      "always"
+    ],
+    "@stylistic/comma-style": [
+      "error",
+      "last"
+    ],
+    "@stylistic/eol-last": [
+      "error",
+      "always"
+    ],
+    "@stylistic/indent": [
+      "error",
+      2
+    ],
+    "@stylistic/jsx-quotes": [
+      "error",
+      "prefer-double"
+    ],
+    "@stylistic/key-spacing": [
+      "error",
+      {
+        "singleLine": {
+          "beforeColon": true,
+          "afterColon": true,
+          "mode": "minimum"
+        },
+        "multiLine": {
+          "beforeColon": false,
+          "afterColon": true,
+          "mode": "minimum",
+          "align": {
+            "beforeColon": true,
+            "afterColon": true,
+            "on": "colon",
+            "mode": "strict"
+          }
+        }
+      }
+    ],
+    "@stylistic/keyword-spacing": [
+      "error",
+      {
+        "before": true,
+        "after": true
+      }
+    ],
+    "@stylistic/linebreak-style": [
+      "error",
+      "unix"
+    ],
+    "no-empty": "off",
+    "@stylistic/no-trailing-spaces": [
+      "error"
+    ],
+    "@stylistic/object-curly-spacing": [
+      "error",
+      "always"
+    ],
+    "@stylistic/operator-linebreak": [
+      "error",
+      "after"
+    ],
+    "@stylistic/quotes": [
+      "error",
+      "single",
+      {
+        "avoidEscape": true,
+        "allowTemplateLiterals": true
+      }
+    ],
+    "@stylistic/semi": [
+      "error",
+      "always"
+    ],
+    "@stylistic/wrap-regex": [
+      "error"
+    ]
+  },
+  "overrides": [
+    {
+      "files": [
+        "**/*.ts",
+        "**/*.tsx",
+        "**/*.mts"
+      ],
+      "plugins": [
+        "@typescript-eslint"
+      ],
+      "parser": "@typescript-eslint/parser",
+      "parserOptions": {
+        "project": "tsconfig.json"
+      }
+    }
+  ]
 }
