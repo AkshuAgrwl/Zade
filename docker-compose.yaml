@@ -3,3 +3,16 @@ services:
     container_name: Backend
     build:
       context: ./backend
+    networks:
+      - BackendBridge
+  frontend:
+    container_name: Frontend
+    build:
+      context: ./frontend
+    networks:
+      - BackendBridge
+    depends_on:
+      - backend
+networks:
+  BackendBridge:
+    driver: bridge
