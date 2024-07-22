@@ -1,0 +1,17 @@
+services:
+  backend:
+    env_file: .env.development
+    build:
+      dockerfile: dev.Dockerfile
+    ports:
+      - 8000:8000
+    develop:
+      watch:
+        - path: ./backend
+          action: rebuild
+          ignore:
+            - app/
+        - path: ./backend/app
+          target: /backend/app
+          action: sync
+    command: poetry run fastapi dev app/main.py --proxy-headers --host 0.0.0.0 --port 8000

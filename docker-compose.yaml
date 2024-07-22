@@ -1,0 +1,5 @@
+services:
+  backend:
+    container_name: Backend
+    build:
+      context: ./backend

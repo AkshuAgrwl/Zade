@@ -1,0 +1,37 @@
+# Runtime data
+**/pids
+**/*.pid
+**/*.seed
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Other Files
+README.md
+LICENSE
+
+# IDE
+**/.vscode
+**/.idea
+
+# Logs
+**/logs
+**/*.log
+
+# Docker
+.docker
+.dockerignore
+*/*Dockerfile*
+*docker-compose*
+
+# Byte-compiled / optimized / DLL files
+**/__pycache__
+**/*.py[cod]
+**/*py.class
+
+# Environment
+.env*
+*/venv
+*/.venv
