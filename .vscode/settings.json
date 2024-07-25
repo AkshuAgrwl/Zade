@@ -11,6 +11,7 @@
     "[python]": {
         "editor.defaultFormatter": "ms-python.black-formatter",
     },
+    "python.analysis.typeCheckingMode": "strict",
     "black-formatter.importStrategy": "fromEnvironment",
     "black-formatter.path": [
         "${workspaceFolder}/backend/.venv/Scripts/black"
