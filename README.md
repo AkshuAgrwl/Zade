@@ -12,9 +12,9 @@ A Music Streaming Service!
     cd Zade
     ```
 
-- Rename [`.env.example`](./.env.example) to `.envs`.
+- Rename [`.env.example`](./.env.example) to `.env`.
 
-- Fill the credentials/parameters in the `.env.development` file accordingly. (Check [Environment Variables](#environment-variables) section)
+- Fill the credentials/parameters in the `.env` file accordingly. (Check [Environment Variables](#environment-variables) section)
 
 - Generate the image and run the docker container (in development environment)
     ```sh
