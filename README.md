@@ -80,9 +80,7 @@ A Music Streaming Service!
 
 #### Supabase:
 
-> Follow the [Supabase's Self Hosting with Docker Guide](https://supabase.com/docs/guides/self-hosting/docker) to understand and configure the environment variables. Note that most of the variables already provided by the supabase have been modified (mostly prefixed with `SUPABASE_` or `SUPABASE_<service_name>_`). 
-
-> Some important variables has been explained below:
+> Follow the [Supabase's Self Hosting with Docker Guide](https://supabase.com/docs/guides/self-hosting/docker) to understand and configure the environment variables. Note that most of the variables already provided by the supabase have been modified (mostly prefixed with `SUPABASE_` or `SUPABASE_<service_name>_`). Some important variables are explained below:
 
 - `SUPABASE_JWT_SECRET`: A JWT Secret key for Supabase. Generate a JWT secret and use it. Make sure to keep it safe and not push it in version control.
 
