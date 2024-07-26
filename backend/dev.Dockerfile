@@ -20,4 +20,4 @@ WORKDIR /backend
 COPY poetry.lock* poetry.toml pyproject.toml ./
 RUN poetry install
 
-COPY ./app ./app
+COPY . .

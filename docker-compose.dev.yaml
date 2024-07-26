@@ -8,13 +8,15 @@ services:
     develop:
       watch:
         - path: ./backend
-          action: rebuild
-          ignore:
-            - app/
-        - path: ./backend/app
-          target: /backend/app
+          target: /backend
           action: sync
-    command: poetry run fastapi dev app/main.py --proxy-headers --host 0.0.0.0 --port 8000
+        - path: ./backend/poetry.lock
+          action: rebuild
+        - path: ./backend/pyproject.toml
+          action: rebuild
+        - path: ./backend/poetry.toml
+          action: rebuild
+    command: poetry run python server.py
   frontend:
     build:
       dockerfile: dev.Dockerfile
