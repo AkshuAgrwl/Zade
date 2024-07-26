@@ -3,12 +3,19 @@ services:
     container_name: Backend
     build:
       context: ./backend
+    environment:
+      ENVIRONMENT: ${ENVIRONMENT}
+      FASTAPI_ENV: ${ENVIRONMENT}
     networks:
       - BackendBridge
   frontend:
     container_name: Frontend
     build:
       context: ./frontend
+    environment:
+      ENVIRONMENT: ${ENVIRONMENT}
+      NODE_ENV: ${ENVIRONMENT}
+      NEXT_TELEMETRY_DISABLED: 1
     networks:
       - BackendBridge
     depends_on:

@@ -1,6 +1,5 @@
 services:
   backend:
-    env_file: .env.development
     build:
       dockerfile: dev.Dockerfile
     ports:
@@ -17,6 +16,7 @@ services:
         - path: ./backend/poetry.toml
           action: rebuild
     command: poetry run python server.py
+
   frontend:
     build:
       dockerfile: dev.Dockerfile
