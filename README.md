@@ -12,11 +12,11 @@ A Music Streaming Service!
     cd Zade
     ```
 
-- Rename [`.env.development.example`](./.env.development.example) to `.env.development`.
+- Rename [`.env.example`](./.env.example) to `.envs`.
 
 - Fill the credentials/parameters in the `.env.development` file accordingly. (Check [Environment Variables](#environment-variables) section)
 
-- Generate the image and run the docker container
+- Generate the image and run the docker container (in development environment)
     ```sh
     docker compose -f docker-compose.yaml -f docker-compose.dev.yaml up --watch
     ```
@@ -41,10 +41,4 @@ A Music Streaming Service!
 
 ## Environment Variables
 
-- `NEXT_TELEMETRY_DISABLED`: Next.js collects completely anonymous telemetry data about general usage. Learn more here: https://nextjs.org/telemetry. (`true`/`false`)
-
-#### Pre-defined variables (not recommended to modify):
-
 - `ENVIRONMENT`: The environment the project is running in. (`development`/`production`).
-
-- `NODE_ENV`: Node.js environment. (`development`/`production`).
