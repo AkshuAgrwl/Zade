@@ -42,3 +42,5 @@ A Music Streaming Service!
 ## Environment Variables
 
 - `ENVIRONMENT`: The environment the project is running in. (`development`/`production`).
+
+- `FRONTEND_NEXTJS_PORT`: Port to expose the frontend Next.js server on. (Default: `3000`)

@@ -12,6 +12,8 @@ services:
     container_name: Frontend
     build:
       context: ./frontend
+    ports:
+      - ${FRONTEND_NEXTJS_PORT:-3000}:3000
     environment:
       ENVIRONMENT: ${ENVIRONMENT}
       NODE_ENV: ${ENVIRONMENT}
