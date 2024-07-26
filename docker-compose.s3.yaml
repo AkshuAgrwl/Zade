@@ -1,0 +1,84 @@
+services:
+  supa-minio:
+    image: minio/minio
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    environment:
+      MINIO_ROOT_USER: supa-storage
+      MINIO_ROOT_PASSWORD: secret1234
+    command: server --console-address ":9001" /data
+    healthcheck:
+      test: curl -f http://supa-minio:9000/minio/health/live
+      interval: 2s
+      timeout: 10s
+      retries: 5
+    volumes:
+      - ./supabase/volumes/storage:/data:z
+
+  supa-minio-createbucket:
+    image: minio/mc
+    depends_on:
+      supa-minio:
+        condition: service_healthy
+    entrypoint: >
+      /bin/sh -c "
+      /usr/bin/mc alias set supa-minio http://supa-minio:9000 supa-storage secret1234;
+      /usr/bin/mc mb supa-minio/stub;
+      exit 0;
+      "
+
+  supa-storage:
+    container_name: SupabaseStorage
+    image: supabase/storage-api:v0.43.11
+    depends_on:
+      db:
+        condition: service_healthy
+      supa-rest:
+        condition: service_started
+      supa-imgproxy:
+        condition: service_started
+      supa-minio:
+        condition: service_healthy
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://localhost:5000/status
+      timeout: 5s
+      interval: 5s
+      retries: 3
+    restart: unless-stopped
+    environment:
+      ANON_KEY: ${SUPABASE_ANON_KEY}
+      SERVICE_KEY: ${SUPABASE_SERVICE_ROLE_KEY}
+      POSTGREST_URL: http://supa-rest:3000
+      PGRST_JWT_SECRET: ${SUPABASE_JWT_SECRET}
+      DATABASE_URL: postgres://supabase_storage_admin:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
+      FILE_SIZE_LIMIT: 52428800
+      STORAGE_BACKEND: s3
+      GLOBAL_S3_BUCKET: ${SUPABASE_STORAGE_S3_GLOBAL_S3_BUCKET}
+      GLOBAL_S3_ENDPOINT: http://supa-minio:9000
+      GLOBAL_S3_PROTOCOL: http
+      GLOBAL_S3_FORCE_PATH_STYLE: true
+      AWS_ACCESS_KEY_ID: supa-storage
+      AWS_SECRET_ACCESS_KEY: secret1234
+      AWS_DEFAULT_REGION: stub
+      FILE_STORAGE_BACKEND_PATH: /var/lib/storage
+      TENANT_ID: stub
+      # TODO: https://github.com/supabase/storage-api/issues/55
+      REGION: ${SUPABASE_STORAGE_S3_REGION}
+      ENABLE_IMAGE_TRANSFORMATION: "true"
+      IMGPROXY_URL: http://supa-imgproxy:5001
+    volumes:
+      - ./supabase/volumes/storage:/var/lib/storage:z
+
+  supa-imgproxy:
+    container_name: SupabaseImgproxy
+    image: darthsim/imgproxy:v3.8.0
+    healthcheck:
+      test: imgproxy health
+      timeout: 5s
+      interval: 5s
+      retries: 3
+    environment:
+      IMGPROXY_BIND: ":5001"
+      IMGPROXY_USE_ETAG: "true"
+      IMGPROXY_ENABLE_WEBP_DETECTION: ${SUPABASE_IMGPROXY_ENABLE_WEBP_DETECTION}

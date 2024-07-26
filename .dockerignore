@@ -5,6 +5,7 @@
 
 # Git
 .git
+.github
 .gitignore
 .gitattributes
 
@@ -23,7 +24,7 @@ LICENSE
 # Docker
 .docker
 .dockerignore
-*/*Dockerfile*
+**/*Dockerfile*
 *docker-compose*
 
 # Byte-compiled / optimized / DLL files
@@ -32,12 +33,12 @@ LICENSE
 **/*py.class
 
 # Environment
-.env*
-*/venv
-*/.venv
+**/*.env*
+**/venv
+**/.venv
 
 # Node.js
-*/node_modules
+**/node_modules
 
 # Next.js
-*/.next
+**/.next

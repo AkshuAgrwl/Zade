@@ -1,7 +1,9 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+.DS_Store
+
 # dependencies
-node_modules
+node_modules/
 .pnp
 .pnp.js
 .yarn/install-state.gz
@@ -13,6 +15,7 @@ coverage
 .env
 .venv
 *env.*
+!.env.example
 !.env.*.example
 env/
 venv/
@@ -21,13 +24,25 @@ env.bak/
 venv.bak/
 
 # Log
-logs/
+logs/*
+!supabase/volumes/logs/vector.yml
 *.log
+
+# Temporary Files
+tmp
+*.tmp
+*.swp
 
 # IDE
 .idea
 .vscode/*
 !.vscode/settings.json
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -106,6 +121,20 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# Diagnostic reports (https://nodejs.org/api/report.html)
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
 # misc
 .DS_Store
 *.pem
+
+# GCloud Keys (For self-hosted logs: https://github.com/supabase/supabase/blob/86e3ab20abfdb9c3e666334d3d2f8efeef9ccf2c/docker/docker-compose-logging.yml#L101 , and other services)
+gcloud.json
+
+# Supabase volumes
+supabase/volumes/storage
+
+# PostgreSQL
+# By supabase
+db/data
+db/volumes

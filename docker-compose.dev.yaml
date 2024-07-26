@@ -34,3 +34,43 @@ services:
           target: /frontend/src
           action: sync
     command: npm run dev -- -H 0.0.0.0 -p 3000
+
+  db:
+    restart: 'no'
+    ports:
+      # Pass down internal port because it's set dynamically by other services
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    volumes:
+      # Always use a fresh database when developing
+      - /var/lib/postgresql/data
+      # Seed data should be inserted last (alphabetical order)
+      - ./supabase/dev/data.sql:/docker-entrypoint-initdb.d/seed.sql
+
+  supa-studio:
+    build:
+      context: ..
+      dockerfile: studio/Dockerfile
+      target: dev
+    ports:
+      - 8082:8082
+
+  supa-mail:
+    container_name: SupabaseMail
+    image: inbucket/inbucket:3.0.3
+    ports:
+      - '2500:2500' # SMTP
+      - '9000:9000' # web interface
+      - '1100:1100' # POP3
+
+  supa-auth:
+    environment:
+      - GOTRUE_SMTP_USER=
+      - GOTRUE_SMTP_PASS=
+
+  supa-meta:
+    ports:
+      - 5555:8080
+
+  supa-storage:
+    volumes:
+      - /var/lib/storage
