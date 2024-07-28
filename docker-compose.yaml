@@ -8,6 +8,10 @@ services:
       FASTAPI_ENV: ${ENVIRONMENT}
     networks:
       - BackendBridge
+      - SuperTokensBridge
+    depends_on:
+      supertokens:
+        condition: service_healthy
 
   frontend:
     container_name: Frontend
@@ -22,17 +26,50 @@ services:
     networks:
       - BackendBridge
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
 
   db:
+    container_name: Database
     image: postgres:16.3
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
+      SUPERTOKENS_POSTGRES_USER: ${SUPERTOKENS_POSTGRES_USER}
+      SUPERTOKENS_POSTGRES_PASSWORD: ${SUPERTOKENS_POSTGRES_PASSWORD}
+      SUPERTOKENS_POSTGRES_DB: ${SUPERTOKENS_POSTGRES_DB}
+    networks:
+      - DatabaseBridge
     volumes:
+      # Initialize users and database required for other services
+      - ./db/scripts/init-user-db.sh:/docker-entrypoint-initdb.d/init-user-db.sh
       - ./db/data:/var/lib/postgresql/data
+    healthcheck:
+      test: pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  supertokens:
+    container_name: SuperTokens
+    image: registry.supertokens.io/supertokens/supertokens-postgresql:9.1.1
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      POSTGRESQL_USER: ${SUPERTOKENS_POSTGRES_USER}
+      POSTGRESQL_PASSWORD: ${SUPERTOKENS_POSTGRES_PASSWORD}
+      POSTGRESQL_HOST: db
+      POSTGRESQL_PORT: 5432
+      POSTGRESQL_DATABASE_NAME: ${SUPERTOKENS_POSTGRES_DB}
+      POSTGRESQL_TABLE_SCHEMA: public
+    networks:
+      - DatabaseBridge
+      - SuperTokensBridge
 
 networks:
   BackendBridge:
-    driver: bridge
+  DatabaseBridge:
+  SuperTokensBridge:

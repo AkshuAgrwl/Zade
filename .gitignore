@@ -126,3 +126,6 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 # misc
 .DS_Store
 *.pem
+
+# PostgreSQL Volume
+db/data
