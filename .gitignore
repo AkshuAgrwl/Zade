@@ -25,7 +25,6 @@ venv.bak/
 
 # Log
 logs/*
-!supabase/volumes/logs/vector.yml
 *.log
 
 # Temporary Files
@@ -127,14 +126,3 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 # misc
 .DS_Store
 *.pem
-
-# GCloud Keys (For self-hosted logs: https://github.com/supabase/supabase/blob/86e3ab20abfdb9c3e666334d3d2f8efeef9ccf2c/docker/docker-compose-logging.yml#L101 , and other services)
-gcloud.json
-
-# Supabase volumes
-supabase/volumes/storage
-
-# PostgreSQL
-# By supabase
-db/data
-db/volumes
