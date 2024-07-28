@@ -34,3 +34,12 @@ services:
           target: /frontend/src
           action: sync
     command: npm run dev -- -H 0.0.0.0 -p 3000
+
+  db:
+    restart: 'no'
+    healthcheck:
+      test: pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
