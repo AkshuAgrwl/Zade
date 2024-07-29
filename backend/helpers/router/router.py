@@ -10,6 +10,7 @@ from typing import (
     Union,
     TYPE_CHECKING,
 )
+from types import ModuleType, FunctionType
 from .types import TreeContainer
 
 import os
@@ -23,7 +24,7 @@ from fastapi.datastructures import Default
 from fastapi.utils import generate_unique_id
 from fastapi.routing import APIRoute, APIRouter
 
-from .route import ClassRoute
+from .route import ClassRoute, ensure_route_params, HTTP_METHODS
 
 if TYPE_CHECKING:
     from enum import Enum
@@ -81,8 +82,8 @@ class DirRouter(APIRouter):
 
         self.parent_dir = parent_dir
         _tree_container = self._generate_tree(parent_dir)
-        _gen_routes = self._generate_routes(_tree_container)
-        self._register_routes(_gen_routes)
+        _route_modules = self._get_route_modules(_tree_container)
+        self.register_routes(_route_modules)
 
     def _generate_tree(self, directory: Path) -> TreeContainer:
         container: TreeContainer = {
@@ -99,10 +100,10 @@ class DirRouter(APIRouter):
 
         return container
 
-    def _generate_routes__partial(
+    def _get_route_modules__partial(
         self, tree_container: TreeContainer, parent_dir: Path, self_uri: str
-    ) -> dict[str, Type[ClassRoute]]:
-        routes: dict[str, Type[ClassRoute]] = {}
+    ) -> dict[str, ModuleType]:
+        routes: dict[str, ModuleType] = {}
 
         if "route.py" in [str(x) for x in tree_container["files"]]:
             module_name = (
@@ -122,18 +123,10 @@ class DirRouter(APIRouter):
                 raise Exception("Some error occured while trying to load routes")
             spec.loader.exec_module(module)
 
-            route_class = getattr(module, "Route", None)
-            if not inspect.isclass(route_class):
-                raise Exception(f"Cannot find 'Route' class in {module_name}")
-            if not issubclass(route_class, ClassRoute):
-                raise Exception(
-                    f"'Route' class in {module_name} must be a subclass of 'ClassRoute'"
-                )
-
-            routes[self_uri] = route_class
+            routes[self_uri] = module
 
         for subdir in tree_container["subdir"]:
-            out = self._generate_routes__partial(
+            out = self._get_route_modules__partial(
                 subdir,
                 parent_dir.joinpath(subdir["dir"]),
                 self_uri + str(subdir["dir"]) + "/",
@@ -142,11 +135,39 @@ class DirRouter(APIRouter):
 
         return routes
 
-    def _generate_routes(
+    def _get_route_modules(
         self, tree_container: TreeContainer
-    ) -> dict[str, Type[ClassRoute]]:
-        return self._generate_routes__partial(tree_container, self.parent_dir, "/")
+    ) -> dict[str, ModuleType]:
+        return self._get_route_modules__partial(tree_container, self.parent_dir, "/")
 
-    def _register_routes(self, routes: dict[str, Type[ClassRoute]]):
-        for route_uri, class_route_instance in routes.items():
-            class_route_instance().register_routes(self, route_uri=route_uri)
+    def register_routes(self, routes: dict[str, ModuleType]):
+        # [(route_uri, HTTP_METHOD, func)]
+        funcs: list[tuple[str, str, FunctionType]] = []
+
+        for route_uri, module in routes.items():
+
+            # Try searching for 'Route' class
+            route_class = getattr(module, "Route", None)
+            if route_class and inspect.isclass(route_class):
+
+                if issubclass(route_class, ClassRoute):
+                    class_funcs = route_class().get_funcs()
+                    funcs.extend([(route_uri, _m, _f) for _m, _f in class_funcs])
+                else:
+                    raise Exception("'Route' class must be an subclass of 'ClassRoute'")
+
+            #  Route class not found, try searching for functions instead
+            else:
+                for method in HTTP_METHODS:
+                    _func: FunctionType | None = getattr(module, method.lower(), None)
+                    if _func:
+                        funcs.append((route_uri, method, _func))
+
+        for route_uri, method, func in funcs:
+            params = ensure_route_params(func)
+            params["methods"] = [method]
+
+            self.add_api_route(route_uri, func, **params)
+            print(
+                f"[DirRouter] Registered Route '{method}' {route_uri} -> {func} {params['status_code']}"
+            )
