@@ -55,3 +55,19 @@ A Music Streaming Service!
 #### Frontend:
 
 - `FRONTEND_NEXTJS_PORT`: Port to expose the frontend Next.js server on. (Default: `3000`)
+
+#### Database:
+
+- `POSTGRES_USER`: Postgres default user.
+
+- `POSTGRES_PASSWORD`: Password for the `POSTGRES_USER`.
+
+- `POSTGRES_DB`: Default postgres database.
+
+#### SuperTokens:
+
+- `SUPERTOKENS_POSTGRES_USER`: Postgres user for supertokens. This will be created during database initialization with ownership to the `SUPABASE_POSTGRES_DB` database.
+
+- `SUPERTOKENS_POSTGRES_PASSWORD`: Password for the `SUPERTOKENS_POSTGRES_USER`.
+
+- `SUPERTOKENS_POSTGRES_DB`: Database for SuperTokens. This will be created during initialization and it's ownership will be given to `SUPERTOKENS_POSTGRES_USER`.
