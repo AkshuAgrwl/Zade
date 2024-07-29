@@ -12,6 +12,12 @@ services:
     depends_on:
       supertokens:
         condition: service_healthy
+    healthcheck:
+      test: curl --fail http://localhost:8000/ping/ || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
   frontend:
     container_name: Frontend
@@ -28,6 +34,12 @@ services:
     depends_on:
       backend:
         condition: service_healthy
+    healthcheck:
+      test: curl --fail http://localhost:3000/ping || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
   db:
     container_name: Database
