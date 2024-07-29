@@ -212,4 +212,6 @@ class ClassRoute:
                 if not _param_meta:
                     _param_meta = self.__DEFAULT_PARAM_META__
 
+                _param_meta["methods"] = [method.upper()]
+
                 router.add_api_route(route_uri, _selfed_func, **_param_meta)
