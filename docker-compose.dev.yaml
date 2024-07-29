@@ -15,7 +15,7 @@ services:
           action: rebuild
         - path: ./backend/poetry.toml
           action: rebuild
-    command: poetry run python server.py
+    command: poetry run fastapi dev main.py
 
   frontend:
     build:
