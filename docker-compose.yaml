@@ -5,7 +5,10 @@ services:
       context: ./backend
     environment:
       ENVIRONMENT: ${ENVIRONMENT}
+      APP_NAME: ${APP_NAME}
+      SITE_URL: ${SITE_URL}
       FASTAPI_ENV: ${ENVIRONMENT}
+      SUPERTOKENS_CONNECTION_URI: http://supertokens:3567
     networks:
       - BackendBridge
       - SuperTokensBridge
