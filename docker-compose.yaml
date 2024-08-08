@@ -28,12 +28,21 @@ services:
     container_name: Frontend
     build:
       context: ./frontend
+      args:
+        NEXT_PUBLIC_APP_NAME: ${APP_NAME}
+        NEXT_PUBLIC_API_URI: http://localhost:8000
+        NEXT_PUBLIC_API_AUTH_BASE_PATH: '/auth'
+        NEXT_PUBLIC_SITE_URL: ${SITE_URL}
     ports:
       - ${FRONTEND_NEXTJS_PORT:-3000}:3000
     environment:
       ENVIRONMENT: ${ENVIRONMENT}
       NODE_ENV: ${ENVIRONMENT}
       NEXT_TELEMETRY_DISABLED: 1
+      # NEXT_PUBLIC_APP_NAME: ${APP_NAME}
+      # NEXT_PUBLIC_API_URI: http://backend:8000
+      # NEXT_PUBLIC_API_AUTH_BASE_PATH: '/auth'
+      # NEXT_PUBLIC_SITE_URL: ${SITE_URL}
     networks:
       - BackendBridge
     depends_on:
