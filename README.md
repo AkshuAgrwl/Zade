@@ -52,9 +52,17 @@ A Music Streaming Service!
 
 - `ENVIRONMENT`: The environment the project is running in. (`development`/`production`).
 
+- `APP_NAME`: Name of the Application. (Default: `Zade`)
+
+- `SITE_URL`: The public URL of the site. (Default: `http://localhost:3000`)
+
 #### Frontend:
 
 - `FRONTEND_NEXTJS_PORT`: Port to expose the frontend Next.js server on. (Default: `3000`)
+
+#### Backend:
+
+- `BACKEND_FASTAPI_PORT`: Port to expose the backend FastAPI server on. (Default: `8000`)
 
 #### Database:
 
