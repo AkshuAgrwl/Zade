@@ -2,8 +2,6 @@ services:
   backend:
     build:
       dockerfile: dev.Dockerfile
-    ports:
-      - 8000:8000
     develop:
       watch:
         - path: ./backend
