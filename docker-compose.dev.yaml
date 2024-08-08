@@ -4,15 +4,31 @@ services:
       dockerfile: dev.Dockerfile
     develop:
       watch:
+        # - path: ./backend
+        #   target: /backend
+        #   action: sync
+        # - path: ./backend/poetry.lock
+        #   action: rebuild
+        # - path: ./backend/pyproject.toml
+        #   action: rebuild
+        # - path: ./backend/poetry.toml
+        #   action: rebuild
         - path: ./backend
-          target: /backend
+          action: rebuild
+          ignore:
+            - app/
+            - helpers/
+            - main.py
+            - .venv/
+        - path: ./backend/app
+          target: backend/app
           action: sync
-        - path: ./backend/poetry.lock
-          action: rebuild
-        - path: ./backend/pyproject.toml
-          action: rebuild
-        - path: ./backend/poetry.toml
-          action: rebuild
+        - path: ./backend/helpers
+          target: /backend/helpers
+          action: sync
+        - path: ./backend/main.py
+          target: /backend/main.py
+          action: sync
     command: poetry run fastapi dev main.py --host 0.0.0.0 --port 8000
 
   frontend:
@@ -25,6 +41,8 @@ services:
           ignore:
             - public/
             - src/
+            - node_modules/
+            - .next/
         - path: ./frontend/public
           target: /frontend/public
           action: sync
