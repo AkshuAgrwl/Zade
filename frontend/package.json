@@ -13,6 +13,9 @@
     "next": "14.2.5",
     "react": "^18",
     "react-dom": "^18",
+    "supertokens-auth-react": "^0.44.0",
+    "supertokens-node": "^20.0.0",
+    "supertokens-web-js": "^0.13.0",
     "tailwind-merge": "^2.4.0"
   },
   "devDependencies": {

@@ -5,6 +5,7 @@ import type { Metadata } from 'next';
 import { Poppins } from 'next/font/google';
 
 import { HomeBackground } from '@/components/background';
+import { SuperTokensProvider } from '@/components/providers/supertokens';
 
 const inter = Poppins({
   weight  : [ '100', '200', '300', '400', '500', '600', '700', '800', '900' ],
@@ -22,10 +23,12 @@ export default function RootLayout(
   }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <HomeBackground />
-        {children}
-      </body>
+      <SuperTokensProvider>
+        <body className={inter.className}>
+          <HomeBackground />
+          {children}
+        </body>
+      </SuperTokensProvider>
     </html>
   );
 }
