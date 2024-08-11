@@ -9,7 +9,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 export default function Input({ label, labelClassName, ...inputProps }: InputProps) {
   return (
     <div className="flex flex-col">
-      {label ? <label className={cn('font-bold text-secondary ', labelClassName)}>{label}</label> : null}
+      {label ? <label htmlFor={inputProps.name} className={cn('font-bold text-secondary ', labelClassName)}>{label}</label> : null}
       <input
         {...inputProps}
         className={cn(
